@@ -24,7 +24,7 @@ public class SprimeBT {
 			bluetoothDeviceDiscovery.listDevices();
 		}
 
-		if (false) {
+		if (true) {
 			// scan and print nearby bluetooth device services
 			System.out.println("\n" + "Testing BT Service Discovery" + "\n");
 			BluetoothServiceDiscovery bluetoothServiceDiscovery = new BluetoothServiceDiscovery();
