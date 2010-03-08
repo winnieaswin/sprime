@@ -28,25 +28,25 @@ class ApplicationController {
         @Secured(['ROLE_USER'])
         def viewData = {
 
-            def type = "Current";
+            def type = "current";
 
             // Break on logic depending on what view we want to show.
             if (params.id == 'daily') {
                 // Daily view logic
-                type = "Daily"
+                type = "daily"
 
 
             } else if (params.id == 'weekly') {
                 // Weekly view logic
-                type = "Weekly"
+                type = "weekly"
 
             } else if (params.id == 'monthly') {
                 // Monthly view logic
-                type = "Monthly"
+                type = "monthly"
 
             } else if (params.id == 'yearly') {
                 // Yearly view logic
-                type = "Yearly"
+                type = "yearly"
 
             } else {
                 // Current view logic.
@@ -54,6 +54,25 @@ class ApplicationController {
             }
 
             render(view: '/viewData', model: [type : type])
+        }
+
+        @Secured(['ROLE_USER'])
+        def controlPower = {
+            
+            def msg = ''
+
+            if (params.control == 'on') {
+                msg = 'Power Turned On'
+
+            } else if (params.control == 'off') {
+                msg = 'Power Turned Off'
+            }
+
+            if (msg != '') {
+                flash.message = msg
+            }
+
+            redirect(action:'viewData', params: params)
         }
 
     	/**

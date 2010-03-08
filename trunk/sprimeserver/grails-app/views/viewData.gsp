@@ -5,36 +5,19 @@
   </head>
   <body>
 
-        <div id="leftSideBar" class="span-5 colborder">
+        <g:displaySideBar />
 
-          <h3 class="caps">View Data</h3>
-
-          <div class="box">
-            <ul class="list">
-             <li><a class="quiet" href="${resource(file:'/viewData')}?id=daily">Daily</a></li>
-             <li><a href="${resource(file:'/viewData')}?id=weekly" class="quiet">Weekly</a></li>
-             <li><a href="${resource(file:'/viewData')}?id=monthly" class="quiet">Monthly</a></li>
-             <li><a href="${resource(file:'/viewData')}?id=yearly" class="quiet">Yearly</a></li>
-            </ul>
-          </div>
-
-          <h3 class="caps">Control Power</h3>
-
-          <div class="box">
-            <ul class="list">
-             <li><a href="#" class="quiet">ON</a></li>
-             <li><a href="#" class="quiet">OFF</a></li>
-            </ul>
-          </div>
-
-
-        </div>
-
-        
         <div class="span-18 last">
-          <h3 class="loud">${type} Power Usage</h3>
 
-          <p>Here is a break down of your <span style="text-transform:lowercase">${type}</span> power usage:</p>
+          <g:if test='${flash.message}'>
+            <div class='success'>${flash.message}</div>
+	  </g:if>
+
+          <h3 class="loud"><span style="text-transform:capitalize">${type}</span> Power Usage</h3>
+
+          <p>Here is a break down of your ${type} power usage:</p>
+
+          <form >
         </div>
 
   </body>
