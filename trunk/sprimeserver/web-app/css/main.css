@@ -1,0 +1,31 @@
+img#logo {
+
+    float: left;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    padding-right: 1em;
+}
+
+a {
+    text-decoration: none;
+}
+
+#sprime_header {
+
+    margin-top: 24px;
+
+}
+
+#logoutLink {
+    text-decoration: none;
+    margin-top: 24px;
+    font-size: 2em;
+}
+
+ul.list {
+
+    list-style-type:none;
+    margin-left: 0px;
+    margin-bottom: 0px;
+
+}
