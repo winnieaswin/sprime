@@ -14,17 +14,13 @@
             <div class='success'>${flash.message}</div>
 	  </g:if>
 
-          <h3 class="loud">Edit User Settings</h3>
-
-          <p>Feel free to edit your user information and settings.</p>
-
-          <g:if test='${flash.message}'>
-            <div class='success'>${flash.message}</div>
-	  </g:if>
-
           <g:if test='${flash.errorMsg}'>
             <div class='error'>${flash.errorMsg}</div>
 	  </g:if>
+
+          <h3 class="loud">Edit User Settings</h3>
+
+          <p>Feel free to edit your user information and settings.</p>
 
           <div id="userSettingsForm" class="span-10 append-8 last">
 
