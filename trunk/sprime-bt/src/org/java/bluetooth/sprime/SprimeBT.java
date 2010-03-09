@@ -24,7 +24,7 @@ public class SprimeBT {
 			bluetoothDeviceDiscovery.listDevices();
 		}
 
-		if (true) {
+		if (false) {
 			// scan and print nearby bluetooth device services
 			System.out.println("\n" + "Testing BT Service Discovery" + "\n");
 			BluetoothServiceDiscovery bluetoothServiceDiscovery = new BluetoothServiceDiscovery();
@@ -38,7 +38,7 @@ public class SprimeBT {
 			sppServer.runServer();
 		}
 
-		if (false) {
+		if (true) {
 			// start a bluetooth client
 			System.out.println("\n" + "Testing BT Client" + "\n");
 			SimpleSPPClient sppClient = new SimpleSPPClient();

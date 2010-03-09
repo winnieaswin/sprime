@@ -36,8 +36,12 @@ public class SimpleSPPServer {
 	// start server
 	private void startServer() throws IOException {
 
-		// Create a UUID for SPP
-		UUID uuid = new UUID("1101", true);
+		// Create a UUID 
+		UUID uuid = new UUID("1101", true); // serial, SPP
+		//UUID uuid = new UUID("1105", true); // obex obj push
+		//UUID uuid = new UUID("0003", true); // rfcomm 
+		//UUID uuid = new UUID("1106", true); // obex file transfer
+		
 
 		// Create the service url
 		String connectionString = "btspp://localhost:" + uuid + ";name=Sample SPP Server";

@@ -77,16 +77,21 @@ public class SimpleSPPClient implements DiscoveryListener {
 		}
 
 		// prompt user
-		System.out.print("Choose the device to search for Obex Push service : ");
+		System.out.print("Choose the device to search for service : ");
 		BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
 		String chosenIndex = bReader.readLine();
 		int index = Integer.parseInt(chosenIndex.trim());
 
-		// check for obex service
+		// check for services
 		RemoteDevice remoteDevice = (RemoteDevice) vecDevices.elementAt(index - 1);
 		UUID[] uuidSet = new UUID[1];
-		uuidSet[0] = new UUID("1105", true);
-		System.out.println("\nSearching for service...");
+		
+		uuidSet[0] = new UUID("1101", true); // serial, SPP
+		//uuidSet[0] = new UUID("0003", true); // rfcomm 
+		//uuidSet[0] = new UUID("1106", true); // obex file transfer
+		//uuidSet[0] = new UUID("1105", true); // obex obj push 
+		
+		System.out.println("\nSearching for services...");
 		agent.searchServices(null, uuidSet, remoteDevice, this);
 
 		// avoid callback conflicts
@@ -100,17 +105,14 @@ public class SimpleSPPClient implements DiscoveryListener {
 
 		// check
 		if (connectionURL == null) {
-			System.out.println("Device does not support Simple SPP Service.");
+			System.out.println("Device does not support Service.");
 			System.exit(0);
 		}
 
 		// connect to the server
 		StreamConnection streamConnection = null;
 		try {
-			streamConnection = (StreamConnection) Connector.open(connectionURL); // this cast
-																				 // doesn't work on
-																				 // my machine ~
-																				 // Chris
+			streamConnection = (StreamConnection) Connector.open(connectionURL); 
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);
