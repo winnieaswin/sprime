@@ -1,6 +1,7 @@
 package sprime.server
 
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured;
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import sprime.server.Person
 
 @Secured(['ROLE_USER'])
 class SettingsController {
@@ -15,11 +16,9 @@ class SettingsController {
      * that the user can edit it.
      */
     def viewUserSettings = {
-
-        def person = authenticateService.userDomain();
+        def person = Person.get(authenticateService.userDomain().id)
 
         [person : person]
-        
     }
 
     /**
@@ -36,7 +35,7 @@ class SettingsController {
 	}
 
         if (params.fullname) {
-            person.userRealName = fullname;
+            person.userRealName = params.fullname;
         }
 
         if (params.email) {
@@ -54,6 +53,12 @@ class SettingsController {
                 return;
             }
 
+            if (params.newpassword.equals('')) {
+                flash.errorMsg = 'The password cannot be empty.'
+                redirect(action: 'viewUserSettings');
+                return;
+            }
+
             if (!params.newpassword.equals(params.confirmpassword)) {
                 flash.errorMsg = 'The new password and the confirm new password are not the same.'
                 redirect(action:'viewUserSettings');
@@ -66,6 +71,7 @@ class SettingsController {
 
         if (person.save()) {
             flash.message = 'Saved user information'
+            authenticateService.userDomain();
             // Update the current user context.
             redirect(action: 'viewUserSettings');
 

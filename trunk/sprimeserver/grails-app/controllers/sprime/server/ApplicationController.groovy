@@ -101,6 +101,8 @@ class ApplicationController {
 		}
 	}
 
+        def logout = {redirect(uri: '/j_spring_security_logout')}
+
     	/**
 	 * Check if logged in.
 	 */
