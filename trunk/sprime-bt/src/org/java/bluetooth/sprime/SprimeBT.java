@@ -31,7 +31,7 @@ public class SprimeBT {
 			bluetoothServiceDiscovery.listServices();
 		}
 
-		if (false) {
+		if (true) {
 			// start a bluetooth server
 			System.out.println("\n" + "Testing BT Server" + "\n");
 			SimpleSPPServer sppServer = new SimpleSPPServer();
