@@ -35,6 +35,8 @@ class ApplicationController {
                 // Daily view logic
                 type = "daily"
 
+            } else if (params.id == 'hourly') {
+                type = 'hourly'
 
             } else if (params.id == 'weekly') {
                 // Weekly view logic
@@ -70,6 +72,7 @@ class ApplicationController {
 
             if (msg != '') {
                 flash.message = msg
+                flash.success = true;
             }
 
             redirect(action:'viewData', params: params)
