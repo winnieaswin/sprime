@@ -117,6 +117,7 @@ public class SimpleSPPClient implements DiscoveryListener {
 			e.printStackTrace();
 			System.exit(0);
 		}
+		System.out.println("Connected to server.");
 
 		// send string
 		OutputStream outStream = streamConnection.openOutputStream();
