@@ -19,6 +19,7 @@ import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 
+
 /**
  * A simple SPP client that connects with an SPP server
  */
@@ -110,9 +111,9 @@ public class SimpleSPPClient implements DiscoveryListener {
 		}
 
 		// connect to the server
-		StreamConnection streamConnection = null;
+		StreamConnection connection = null;
 		try {
-			streamConnection = (StreamConnection) Connector.open(connectionURL); 
+			connection = (StreamConnection) Connector.open(connectionURL); 
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -120,18 +121,38 @@ public class SimpleSPPClient implements DiscoveryListener {
 		System.out.println("Connected to server.");
 
 		// send string
-		OutputStream outStream = streamConnection.openOutputStream();
-		PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
-		pWriter.write("Test String from SPP Client\r\n");
-		pWriter.flush();
+//		OutputStream outStream = streamConnection.openOutputStream();
+//		PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
+//		pWriter.write("Test String from SPP Client\r\n");
+//		pWriter.flush();
+		
+		// send string
+		Thread sendT = new Thread(new sendLoop(connection));
+		sendT.start();
 
 		// read response
-		InputStream inStream = streamConnection.openInputStream();
-		BufferedReader bReader2 = new BufferedReader(new InputStreamReader(inStream));
-		String lineRead = bReader2.readLine();
-		System.out.println(lineRead);
+//		InputStream inStream = streamConnection.openInputStream();
+//		BufferedReader bReader2 = new BufferedReader(new InputStreamReader(inStream));
+//		String lineRead = bReader2.readLine();
+//		System.out.println(lineRead);
+		
+		// read response
+//		Thread recvT = new Thread(new recvLoop(connection));
+//		recvT.start();
 
-	}
+		System.out.println("\nClient threads started");
+		
+		// stay alive
+		while (true) {
+    		try {
+    			Thread.sleep(2000);
+    			//System.out.println("\nClient looping.");
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
+		}
+		
+	} // runClient
 
 	// methods of DiscoveryListener
 	public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
@@ -163,6 +184,64 @@ public class SimpleSPPClient implements DiscoveryListener {
 			lock.notify();
 		}
 
-	}// end method
+	}
+	
+	 private static class recvLoop implements Runnable {
+			private StreamConnection connection = null;
+			private InputStream inStream = null;
+			public recvLoop(StreamConnection c) {
+				this.connection = c;
+				try {
+					this.inStream = this.connection.openInputStream();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public void run() {
+				while(true) {	
+	    			try {
+	    				
+	    				BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
+	        			String lineRead = bReader.readLine();
+	        			System.out.println("Client recv: "+ lineRead);
+	        			Thread.sleep(500);
+	    			}
+	    			catch(Exception e) {		
+	    				e.printStackTrace();
+	    			}
+				}
+			}
+		 } // recvLoop
+
+		 private static class sendLoop implements Runnable {
+				private StreamConnection connection = null;
+				PrintWriter pWriter = null;
+				public sendLoop(StreamConnection c) {
+					this.connection = c;
+					OutputStream outStream;
+					try {
+						outStream = this.connection.openOutputStream();
+						this.pWriter = new PrintWriter(new OutputStreamWriter(outStream));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				@Override
+				public void run() {
+					while(true) {	
+		    			try {
+		    				String line = "Test String from SPP Client\r\n" ; // "\r\n" important
+		    				pWriter.write(line);
+		    				pWriter.flush();
+		    				System.out.println("Client send: "+ line);
+		        			Thread.sleep(500);
+		    			}
+		    			catch(Exception e) {	
+		    				e.printStackTrace();
+		    			}
+					}
+				}
+			 } // sendLoop 
 
 }
