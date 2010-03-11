@@ -27,8 +27,7 @@ public class SimpleSPPServer {
 		System.out.println("Address: " + localDevice.getBluetoothAddress());
 		System.out.println("Name: " + localDevice.getFriendlyName());
 
-		// SimpleSPPServer sampleSPPServer = new SimpleSPPServer();
-		// sampleSPPServer.startServer();
+		// run server
 		this.startServer();
 
 	} // runServer
@@ -83,12 +82,9 @@ public class SimpleSPPServer {
 //		Thread sendT = new Thread(new sendLoop(connection));
 //		sendT.start();
 		
-		// close connection
-//		pWriter.close();
-//		streamConnNotifier.close();
-		
 		System.out.println("\nServer threads started");
 		
+		// stay alive
 		while (true) {
     		try {
     			Thread.sleep(2000);
@@ -156,7 +152,7 @@ public class SimpleSPPServer {
 	    			}
 				}
 			}
-		 } // recvLoop 
+		 } // sendLoop 
 	 
 	 
 	 
