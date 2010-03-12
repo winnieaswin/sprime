@@ -19,7 +19,6 @@ import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 
-
 /**
  * A simple SPP client that connects with an SPP server
  */
@@ -86,12 +85,12 @@ public class SimpleSPPClient implements DiscoveryListener {
 		// check for services
 		RemoteDevice remoteDevice = (RemoteDevice) vecDevices.elementAt(index - 1);
 		UUID[] uuidSet = new UUID[1];
-		
+
 		uuidSet[0] = new UUID("1101", true); // serial, SPP
-		//uuidSet[0] = new UUID("0003", true); // rfcomm 
-		//uuidSet[0] = new UUID("1106", true); // obex file transfer
-		//uuidSet[0] = new UUID("1105", true); // obex obj push 
-		
+		// uuidSet[0] = new UUID("0003", true); // rfcomm
+		// uuidSet[0] = new UUID("1106", true); // obex file transfer
+		// uuidSet[0] = new UUID("1105", true); // obex obj push
+
 		System.out.println("\nSearching for services...");
 		agent.searchServices(null, uuidSet, remoteDevice, this);
 
@@ -113,7 +112,7 @@ public class SimpleSPPClient implements DiscoveryListener {
 		// connect to the server
 		StreamConnection connection = null;
 		try {
-			connection = (StreamConnection) Connector.open(connectionURL); 
+			connection = (StreamConnection) Connector.open(connectionURL);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -121,37 +120,37 @@ public class SimpleSPPClient implements DiscoveryListener {
 		System.out.println("Connected to server.");
 
 		// send string
-//		OutputStream outStream = streamConnection.openOutputStream();
-//		PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
-//		pWriter.write("Test String from SPP Client\r\n");
-//		pWriter.flush();
-		
+		// OutputStream outStream = streamConnection.openOutputStream();
+		// PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
+		// pWriter.write("Test String from SPP Client\r\n");
+		// pWriter.flush();
+
 		// send string
 		Thread sendT = new Thread(new sendLoop(connection));
 		sendT.start();
 
 		// read response
-//		InputStream inStream = streamConnection.openInputStream();
-//		BufferedReader bReader2 = new BufferedReader(new InputStreamReader(inStream));
-//		String lineRead = bReader2.readLine();
-//		System.out.println(lineRead);
-		
+		// InputStream inStream = streamConnection.openInputStream();
+		// BufferedReader bReader2 = new BufferedReader(new InputStreamReader(inStream));
+		// String lineRead = bReader2.readLine();
+		// System.out.println(lineRead);
+
 		// read response
-//		Thread recvT = new Thread(new recvLoop(connection));
-//		recvT.start();
+		Thread recvT = new Thread(new recvLoop(connection));
+		recvT.start();
 
 		System.out.println("\nClient threads started");
-		
+
 		// stay alive
 		while (true) {
-    		try {
-    			Thread.sleep(2000);
-    			//System.out.println("\nClient looping.");
-    		} catch (InterruptedException e) {
-    			e.printStackTrace();
-    		}
+			try {
+				Thread.sleep(2000);
+				// System.out.println("\nClient looping.");
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-		
+
 	} // runClient
 
 	// methods of DiscoveryListener
@@ -185,63 +184,68 @@ public class SimpleSPPClient implements DiscoveryListener {
 		}
 
 	}
-	
-	 private static class recvLoop implements Runnable {
-			private StreamConnection connection = null;
-			private InputStream inStream = null;
-			public recvLoop(StreamConnection c) {
-				this.connection = c;
+
+	private static class recvLoop implements Runnable {
+		private StreamConnection connection = null;
+		private InputStream inStream = null;
+
+		public recvLoop(StreamConnection c) {
+			this.connection = c;
+			try {
+				this.inStream = this.connection.openInputStream();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void run() {
+			while (true) {
 				try {
-					this.inStream = this.connection.openInputStream();
+
+					BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
+					String lineRead = bReader.readLine();
+					System.out.println("Client recv: " + lineRead);
+					Thread.sleep(500);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			@Override
-			public void run() {
-				while(true) {	
-	    			try {
-	    				
-	    				BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
-	        			String lineRead = bReader.readLine();
-	        			System.out.println("Client recv: "+ lineRead);
-	        			Thread.sleep(500);
-	    			}
-	    			catch(Exception e) {		
-	    				e.printStackTrace();
-	    			}
+		}
+	} // recvLoop
+
+	private static class sendLoop implements Runnable {
+		private StreamConnection connection = null;
+		PrintWriter pWriter = null;
+
+		public sendLoop(StreamConnection c) {
+			this.connection = c;
+			OutputStream outStream;
+			try {
+				outStream = this.connection.openOutputStream();
+				this.pWriter = new PrintWriter(new OutputStreamWriter(outStream));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					// prompt
+					System.out.println("Enter message: ");
+					BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
+					String inputline = bReader.readLine();
+					pWriter.write(inputline);
+					pWriter.flush();
+					System.out.println("Client send: " + inputline);
+					Thread.sleep(500);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
-		 } // recvLoop
-
-		 private static class sendLoop implements Runnable {
-				private StreamConnection connection = null;
-				PrintWriter pWriter = null;
-				public sendLoop(StreamConnection c) {
-					this.connection = c;
-					OutputStream outStream;
-					try {
-						outStream = this.connection.openOutputStream();
-						this.pWriter = new PrintWriter(new OutputStreamWriter(outStream));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				@Override
-				public void run() {
-					while(true) {	
-		    			try {
-		    				String line = "Test String from SPP Client\r\n" ; // "\r\n" important
-		    				pWriter.write(line);
-		    				pWriter.flush();
-		    				System.out.println("Client send: "+ line);
-		        			Thread.sleep(500);
-		    			}
-		    			catch(Exception e) {	
-		    				e.printStackTrace();
-		    			}
-					}
-				}
-			 } // sendLoop 
+		}
+	} // sendLoop
 
 }

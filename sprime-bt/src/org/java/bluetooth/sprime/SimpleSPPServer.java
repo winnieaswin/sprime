@@ -35,12 +35,11 @@ public class SimpleSPPServer {
 	// start server
 	private void startServer() throws IOException {
 
-		// Create a UUID 
+		// Create a UUID
 		UUID uuid = new UUID("1101", true); // serial, SPP
-		//UUID uuid = new UUID("1105", true); // obex obj push
-		//UUID uuid = new UUID("0003", true); // rfcomm 
-		//UUID uuid = new UUID("1106", true); // obex file transfer
-		
+		// UUID uuid = new UUID("1105", true); // obex obj push
+		// UUID uuid = new UUID("0003", true); // rfcomm
+		// UUID uuid = new UUID("1106", true); // obex file transfer
 
 		// Create the service url
 		String connectionString = "btspp://localhost:" + uuid + ";name=Sample SPP Server";
@@ -63,42 +62,43 @@ public class SimpleSPPServer {
 		}
 
 		// read string from spp client
-//		InputStream inStream = connection.openInputStream();
-//		BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
-//		String lineRead = bReader.readLine();
-//		System.out.println("TEST"+lineRead);
-		
+		// InputStream inStream = connection.openInputStream();
+		// BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
+		// String lineRead = bReader.readLine();
+		// System.out.println("TEST"+lineRead);
+
 		// read string from spp client
 		Thread recvT = new Thread(new recvLoop(connection));
 		recvT.start();
 
 		// send response to spp client
-//		OutputStream outStream = connection.openOutputStream();
-//		PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
-//		pWriter.write("Response String from SPP Server\r\n");
-//		pWriter.flush();
-		
+		// OutputStream outStream = connection.openOutputStream();
+		// PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
+		// pWriter.write("Response String from SPP Server\r\n");
+		// pWriter.flush();
+
 		// send response to spp client
-//		Thread sendT = new Thread(new sendLoop(connection));
-//		sendT.start();
-		
+		Thread sendT = new Thread(new sendLoop(connection));
+		sendT.start();
+
 		System.out.println("\nServer threads started");
-		
+
 		// stay alive
 		while (true) {
-    		try {
-    			Thread.sleep(2000);
-    			//System.out.println("\nServer looping.");
-    		} catch (InterruptedException e) {
-    			e.printStackTrace();
-    		}
+			try {
+				Thread.sleep(2000);
+				// System.out.println("\nServer looping.");
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
 	} // startServer
-	
-	 private static class recvLoop implements Runnable {
+
+	private static class recvLoop implements Runnable {
 		private StreamConnection connection = null;
 		private InputStream inStream = null;
+
 		public recvLoop(StreamConnection c) {
 			this.connection = c;
 			try {
@@ -107,54 +107,55 @@ public class SimpleSPPServer {
 				e.printStackTrace();
 			}
 		}
+
 		@Override
 		public void run() {
-			while(true) {	
-    			try {
-    				
-    				BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
-        			String lineRead = bReader.readLine();
-        			System.out.println("Server recv: "+ lineRead);
-        			Thread.sleep(500);
-    			}
-    			catch(Exception e) {		
-    				e.printStackTrace();
-    			}
-			}
-		}
-	 } // recvLoop
-
-	 private static class sendLoop implements Runnable {
-			private StreamConnection connection = null;
-			PrintWriter pWriter = null;
-			public sendLoop(StreamConnection c) {
-				this.connection = c;
-				OutputStream outStream;
+			while (true) {
 				try {
-					outStream = this.connection.openOutputStream();
-					this.pWriter = new PrintWriter(new OutputStreamWriter(outStream));
-				} catch (IOException e) {
+
+					BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
+					String lineRead = bReader.readLine();
+					System.out.println("Server recv: " + lineRead);
+					Thread.sleep(500);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			@Override
-			public void run() {
-				while(true) {	
-	    			try {
-	    				String line = "Response String from SPP Server\r\n" ; // "\r\n" important
-	    				pWriter.write(line);
-	    				pWriter.flush();
-	    				System.out.println("Server send: "+ line);
-	        			Thread.sleep(500);
-	    			}
-	    			catch(Exception e) {	
-	    				e.printStackTrace();
-	    			}
+		}
+	} // recvLoop
+
+	private static class sendLoop implements Runnable {
+		private StreamConnection connection = null;
+		PrintWriter pWriter = null;
+
+		public sendLoop(StreamConnection c) {
+			this.connection = c;
+			OutputStream outStream;
+			try {
+				outStream = this.connection.openOutputStream();
+				this.pWriter = new PrintWriter(new OutputStreamWriter(outStream));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					// prompt
+					System.out.println("Enter message: ");
+					BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
+					String inputline = bReader.readLine();
+					pWriter.write(inputline);
+					pWriter.flush();
+					System.out.println("Server send: " + inputline);
+					Thread.sleep(500);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
-		 } // sendLoop 
-	 
-	 
-	 
-	 
+		}
+	} // sendLoop
+
 } // class
