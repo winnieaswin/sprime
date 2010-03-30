@@ -1,0 +1,10 @@
+Testsuite: sprime.server.DeviceJMSServiceTestsTests
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.396 sec
+------------- Standard Output ---------------
+--Output from testSendMessageToQueue--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from testSendMessageToQueue--
+------------- ---------------- ---------------
+
+Testcase: testSendMessageToQueue took 0.202 sec

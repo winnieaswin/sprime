@@ -1,9 +1,11 @@
 import sprime.server.Authority;
 import sprime.server.Person;
+import sprime.server.DeviceService;
 
 class BootStrap {
 
      def authenticateService
+     def deviceService
 
      def init = { servletContext ->
 
@@ -26,6 +28,7 @@ class BootStrap {
         authority.addToPeople(person);
         authority.save(flush: true);
 
+        deviceService.createAndStartServer();
      }
      
      def destroy = {
