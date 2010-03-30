@@ -35,7 +35,7 @@ class PowerDataController {
 
         def random = new Random();
 
-        for (int i = 0; i < 50; i++  ) {
+        for (int i = 0; i < 31; i++  ) {
             def row = [:];
 
             def col = [];
@@ -44,7 +44,7 @@ class PowerDataController {
             col.add(val1);
 
             def val2 = [:];
-            val2.v = random.nextInt(100);
+            val2.v = random.nextInt(20) + 30;
             col.add(val2);
 
             row.c = col;

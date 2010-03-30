@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite errors="0" failures="0" hostname="jeffrey-starkers-macbook-pro-3.local" id="0" name="DeviceJMSServiceTestsTests" package="sprime.server" tests="1" time="0.396" timestamp="2010-03-17T18:27:06">
+      <properties />
+
+      <testcase classname="sprime.server.DeviceJMSServiceTestsTests" name="testSendMessageToQueue" time="0.202" />
+
+      <system-out><![CDATA[--Output from testSendMessageToQueue--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSendMessageToQueue--
+]]></system-err>
+
+  </testsuite>
+</testsuites>
