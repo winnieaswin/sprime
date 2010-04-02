@@ -1,29 +1,42 @@
 package sprime.server
 
 
-import sprime.server.BluetoothServer;
+import sprime.server.BluetoothClient;
 import sprime.server.Receiving;
 
 class DeviceService {
 
-    def bgThreadManager
+    def bgThreadManager;
+
+    BluetoothClient client = new BluetoothClient();
+
+    Receiving receivingThread;
 
 
-    BluetoothServer server;
-
-    def createAndStartServer() {
-
-        server = new BluetoothServer();
-        server.createConnection();
-
-        Receiving receiving = new Receiving(server.getConnection());
-
-        bgThreadManager.queueRunnable(receiving);
+    boolean isConnected() {
+        return client.isConnected();
     }
 
-    def sendMessage(msg) {
+    String getDeviceName() {
+        return client.getDeviceName();
+    }
 
-        log.info("Sending Message: " + msg);
-        server.sendMessage(msg);
+    Collection<String> findDevices() throws IOException {
+        return client.findDevices();
+    }
+
+    void connectToDevice(final String name) throws IOException {
+
+        client.connectToDevice(name);
+        // also add receiving thread
+
+        receivingThread = new Receiving(client.getConnection());
+
+        bgThreadManager.queueRunnable(receivingThread);
+    }
+
+    void disconnect() throws IOException {
+        receivingThread.stop();
+        client.disconnect();
     }
 }

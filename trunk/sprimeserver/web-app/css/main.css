@@ -6,8 +6,20 @@ img#logo {
     padding-right: 1em;
 }
 
+em {
+    font-weight: bold;
+}
+
 a {
     text-decoration: none;
+}
+
+img.loadingImage {
+    padding-left: .5em;
+}
+
+a.disabled {
+    color: gray;
 }
 
 #sprime_header {

@@ -13,6 +13,8 @@ public class Receiving implements Runnable {
     private StreamConnection connection = null;
     private InputStream inStream = null;
 
+    private boolean stop = false;
+
     public Receiving(StreamConnection c) {
         connection = c;
 	try {
@@ -24,16 +26,20 @@ public class Receiving implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!this.stop) {
             try {
 
 		BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
 		String lineRead = bReader.readLine();
-		log.info("Server recv: " + lineRead);
+		System.out.println("Server recv: " + lineRead);
 		Thread.sleep(500);
             } catch (final Exception e) {
                 e.printStackTrace();
             }
 	}
+    }
+
+    public void stop() {
+        this.stop = true;
     }
 } // class

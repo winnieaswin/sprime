@@ -27,6 +27,7 @@
             <ul class="list">
              <li><g:link action="viewUserSettings" controller="settings" class="quiet">User Profile</g:link></li>
              <li><a href="#" class="quiet">Graph Setting</a></li>
+             <li><g:link action="displayDeviceManager" controller="device" class="quiet">Device Manager</g:link></li>
             </ul>
           </div>
 
