@@ -27,8 +27,6 @@ class BootStrap {
 
         authority.addToPeople(person);
         authority.save(flush: true);
-
-        deviceService.createAndStartServer();
      }
      
      def destroy = {

@@ -34,7 +34,7 @@
 
         <div class="span-18 last">
 
-          <div id="statusMessage" style="display: none">Messages Go Here</div>
+          <div id="statusMessage" class="notice" style="display: none">Messages Go Here</div>
 
           <h3 class="loud"><span style="text-transform:capitalize">${type}</span> Power Usage</h3>
 

@@ -43,15 +43,15 @@ public class BluetoothServer {
 	StreamConnectionNotifier streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
 
 	// Wait for client connection
-	log.info("\nServer Started. Waiting for clients to connect...");
+	System.out.println("\nServer Started. Waiting for clients to connect...");
 	connection = streamConnNotifier.acceptAndOpen();
 
 	// connect
-	log.info("Connecting to client...");
+	System.out.println("Connecting to client...");
 	RemoteDevice dev = RemoteDevice.getRemoteDevice(connection);
 	try {
-            log.info("Remote device address: " + dev.getBluetoothAddress());
-            log.info("Remote device name: " + dev.getFriendlyName(true));
+            System.out.println("Remote device address: " + dev.getBluetoothAddress());
+            System.out.println("Remote device name: " + dev.getFriendlyName(true));
 	} catch (final IOException ioe) {
             ioe.printStackTrace();
 	}
