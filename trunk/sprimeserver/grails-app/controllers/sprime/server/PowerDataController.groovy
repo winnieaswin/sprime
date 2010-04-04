@@ -4,6 +4,9 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 import grails.converters.JSON
 import sprime.server.DeviceService
 
+import sprime.server.PowerUsage
+import groovy.time.*
+
 /**
  * This controller is responsible for retrieving JSON data about the power usage
  * depending on the type.
@@ -23,6 +26,24 @@ class PowerDataController {
         def cols = [];
         def rows = [];
 
+        def powerUsages = [];
+
+        switch (params.id) {
+            case 'current':
+            case 'hourly':
+            case 'daily' :
+            case 'weekly' :
+            case 'monthly':
+            case 'yearly' :
+            default:
+                use (TimeCategory) {
+                    def currentDate = new Date();
+
+                    powerUsages = PowerUsage.findAllByDateCreatedBetween(currentDate,
+                        currentDate - 20.seconds);
+                }
+        }
+
         def col1 = [:];
         col1.id = 'A';
         col1.label = 'Time';
@@ -36,24 +57,22 @@ class PowerDataController {
         cols.add(col1);
         cols.add(col2);
 
-        def random = new Random();
-
-        for (int i = 0; i < 31; i++  ) {
+        powerUsages.each {
             def row = [:];
 
             def col = [];
             def val1 = [:];
-            val1.v = "Mar ${i}";
+            val1.v = it.dateCreated;
             col.add(val1);
 
             def val2 = [:];
-            val2.v = random.nextInt(20) + 30;
+            val2.v = it.wattage;
             col.add(val2);
 
             row.c = col;
 
             rows.add(row);
-        }
+        };
 
         json.cols = cols;
         json.rows = rows;
