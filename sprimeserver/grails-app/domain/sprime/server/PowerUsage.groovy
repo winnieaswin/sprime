@@ -6,7 +6,7 @@ class PowerUsage {
 
     double wattage;
 
-    static constraints = {
+    static mapping = {
         sort dateCreated: "desc"
     }
 }
