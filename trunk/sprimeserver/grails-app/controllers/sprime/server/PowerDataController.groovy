@@ -2,6 +2,7 @@ package sprime.server
 
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 import grails.converters.JSON
+import sprime.server.DeviceService
 
 /**
  * This controller is responsible for retrieving JSON data about the power usage
@@ -9,6 +10,8 @@ import grails.converters.JSON
  */
 @Secured(['ROLE_USER'])
 class PowerDataController {
+
+    def deviceService
 
     def index = {
         
@@ -63,13 +66,20 @@ class PowerDataController {
         def json = [:];
         def msg = ''
 
-        if (params.id == 'on') {
-            json.message = 'Power Turned On'
-            json.success = true;
-        } else if (params.id == 'off') {
-            json.message = 'Power Turned Off'
-            json.success = true;
+        if (deviceService.isConnected()) {
+            if (params.id == 'on') {
+                json.message = 'Power Turned On'
+                json.success = true;
+            } else if (params.id == 'off') {
+                json.message = 'Power Turned Off'
+                json.success = true;
+            }
+        } else {
+            json.message = "You are not connected to a device";
+            json.success = false;
         }
+
+        
 
         render json as JSON;
     }

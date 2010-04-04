@@ -1,6 +1,10 @@
 package sprime.server;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +36,8 @@ public class BluetoothClient implements DiscoveryListener {
         private StreamConnection connection;
 
         private String deviceName;
+
+        private PrintWriter outboundStream = null;
 
         public Collection<String> findDevices() throws IOException {
 
@@ -105,6 +111,24 @@ public class BluetoothClient implements DiscoveryListener {
 
             // Once we have connected to the device, we can store the devicename.
             this.deviceName = deviceName;
+
+            // Create our outbound stream
+            OutputStream outStream;
+            try {
+	        outStream = this.connection.openOutputStream();
+		outboundStream = new PrintWriter(new OutputStreamWriter(outStream));
+	    } catch (IOException e) {
+	        disconnect();
+                throw new IOException("Unable to connect to device: " + deviceName);
+	    }
+        }
+
+        public void sendMessage(final String message) {
+
+            if (outboundStream != null) {
+                outboundStream.write(message);
+                outboundStream.flush();
+            }
         }
 
         public StreamConnection getConnection() {
@@ -122,8 +146,12 @@ public class BluetoothClient implements DiscoveryListener {
         public void disconnect() throws IOException {
             deviceName = null;
             bluetoothDevices.clear();
+            outboundStream.close();
+            outboundStream = null;
 
             connection.close();
+
+            connection = null;
         }
 
 	// methods of DiscoveryListener
