@@ -25,27 +25,25 @@ void loop()
   if( Serial.available() )     // if data is available to read
   {
     sval = Serial.read();      // read it and store it in 'sval'
-  }
   
-  if( sval == '0' )                // if '0' was received led 13 is switched off
-  {
-    digitalWrite(ledPin, LOW);     // turn Off pin 13 
-    digitalWrite(relayPin, LOW);   // turn Off pin 12
-    //Serial.println("pin 13 off");
-  }
-
-  if( sval == '1' )                // if '1' was received led 13 on
-  {
-    digitalWrite(ledPin, HIGH);    // turn ON pin 13 
-    digitalWrite(relayPin, HIGH);  // turn ON pin 12 
-    //Serial.println("pin 13 on");
+    if( sval == '0' )                // if '0' was received led 13 is switched off
+    {
+      digitalWrite(ledPin, LOW);     // turn Off pin 13 
+      digitalWrite(relayPin, LOW);   // turn Off pin 12
+    }
+  
+    if( sval == '1' )                // if '1' was received led 13 on
+    {
+      digitalWrite(ledPin, HIGH);    // turn ON pin 13 
+      digitalWrite(relayPin, HIGH);  // turn ON pin 12 
+    }
   }
   
   {
     sval = 2;
     sensorValue = analogRead(sensorPin);  // read the value from the sensor:
     Serial.println(sensorValue);
-    delay(1000);                          // waits for a second  
+    delay(500);                          // waits for 1/2 a second  
   }
   
 }
