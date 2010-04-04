@@ -4,6 +4,9 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured;
 import org.springframework.security.DisabledException;
 import org.springframework.security.ui.AbstractProcessingFilter;
 import org.springframework.security.ui.webapp.AuthenticationProcessingFilter;
+import sprime.server.DeviceService;
+
+import grails.converters.JSON
 
 /**
  * This is the main controller for the server. Or the entry point. This class
@@ -16,6 +19,18 @@ class ApplicationController {
 	 */
 	def authenticateService
 
+        /**
+         * Dependency injection for the device service.
+         */
+        def deviceService
+
+        /**
+         * The main page of the application. This action will redirect the
+         * user to the correct page depending on whether they are logged in.
+         *
+         * If they are logged in, then it will go to the first page that displays
+         * data of the sprime device. Otherwise, it will redirect to the login page.
+         */
         def index = {
 
             if (isLoggedIn()) {
@@ -25,6 +40,11 @@ class ApplicationController {
             }
         }
 
+        /**
+         * This action determines what type of view to show the user. The user
+         * can pick any number of time views such as daily, current, hourly,
+         * weekly, etc power usage views.
+         */
         @Secured(['ROLE_USER'])
         def viewData = {
 
@@ -58,21 +78,36 @@ class ApplicationController {
             render(view: '/viewData', model: [type : type])
         }
 
+        /**
+         * This action will turn off or on the power of the device depending
+         * on what is sent to this action.
+         */
         @Secured(['ROLE_USER'])
         def controlPower = {
-            
-            def msg = ''
 
-            if (params.control == 'on') {
-                msg = 'Power Turned On'
+            def json = [:];
 
-            } else if (params.control == 'off') {
-                msg = 'Power Turned Off'
-            }
+            if (deviceService.isConnected()) {
 
-            if (msg != '') {
-                flash.message = msg
-                flash.success = true;
+                def msg = ''
+
+                if (params.control == 'on') {
+                    msg = '1';
+                    flash.message = 'Power Turned On'
+
+                } else if (params.control == 'off') {
+                    msg = '0';
+                    flash.message = 'Power Turned Off'
+                }
+
+                flash.success = true
+
+                deviceService.sendMessage(msg);
+
+            } else {
+                flash.success = false;
+                flash.message = 'You are not connected to a device.';
+
             }
 
             redirect(action:'viewData', params: params)

@@ -35,6 +35,10 @@ class DeviceService {
         bgThreadManager.queueRunnable(receivingThread);
     }
 
+    void sendMessage(final String msg) {
+        client.sendMessage(msg);
+    }
+
     void disconnect() throws IOException {
         receivingThread.stop();
         client.disconnect();
