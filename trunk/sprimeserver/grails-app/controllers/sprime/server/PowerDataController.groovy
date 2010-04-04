@@ -67,13 +67,18 @@ class PowerDataController {
         def msg = ''
 
         if (deviceService.isConnected()) {
+            
             if (params.id == 'on') {
+                msg = '1';
                 json.message = 'Power Turned On'
                 json.success = true;
             } else if (params.id == 'off') {
+                msg = '0';
                 json.message = 'Power Turned Off'
                 json.success = true;
             }
+
+            deviceService.sendMessage(msg);
         } else {
             json.message = "You are not connected to a device";
             json.success = false;
