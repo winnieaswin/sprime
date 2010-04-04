@@ -206,7 +206,7 @@ public class SimpleSPPClient implements DiscoveryListener {
 					BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
 					String lineRead = bReader.readLine();
 					System.out.println("Client recv: " + lineRead);
-					Thread.sleep(500);
+					Thread.sleep(200);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -240,7 +240,7 @@ public class SimpleSPPClient implements DiscoveryListener {
 					pWriter.write(inputline);
 					pWriter.flush();
 					System.out.println("Client send: " + inputline);
-					Thread.sleep(500);
+					Thread.sleep(200);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
