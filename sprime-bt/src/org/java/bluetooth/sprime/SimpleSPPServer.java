@@ -116,7 +116,7 @@ public class SimpleSPPServer {
 					BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
 					String lineRead = bReader.readLine();
 					System.out.println("Server recv: " + lineRead);
-					Thread.sleep(500);
+					Thread.sleep(200);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -150,7 +150,7 @@ public class SimpleSPPServer {
 					pWriter.write(inputline);
 					pWriter.flush();
 					System.out.println("Server send: " + inputline);
-					Thread.sleep(500);
+					Thread.sleep(200);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
