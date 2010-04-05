@@ -30,7 +30,9 @@ sprime.config = {
         enableTooltip: true,
         titleX: 'Day',
         titleY: 'Power Usage',
-        colors: ['green']
+        colors: ['green'],
+        max: 780,
+        min: 720
     },
 
     // The current chart type to retrieve.
@@ -46,6 +48,11 @@ sprime.config = {
  * This is the global variable for the chart data.
  */
 sprime.chart = null;
+
+/**
+ * The timer for running the current usage chart.
+ */
+sprime.timer = null;
 
 
 sprime.init = function() {
@@ -106,12 +113,25 @@ sprime.drawChart = function() {
  * @param paramId the id of the type of time view to display the graph in.
  */
 sprime.updateChart = function(paramId) {
+    window.clearTimeout();
+
     $.getJSON(sprime.config.retrieveDataUrl + '/' + paramId,
         function(data) {
 
           var chartData = new google.visualization.DataTable(data, 0.6);
           sprime.config.chartConfig.title = paramId + " usage";
           sprime.chart.draw(chartData, sprime.config.chartConfig);
+
+          if (paramId == 'current' && sprime.timer == null && data.rows.length > 0) {
+              sprime.timer = window.setInterval(sprime.updateChart, 1000, paramId);
+	  } else if (paramId != 'current') {
+	      window.clearTimeout(sprime.timer);
+              sprime.timer = null;
+	  }
+
+	  if (data.rows.length == 0) {
+              window.clearTimeout(sprime.timer);
+          }
      });
 }
 

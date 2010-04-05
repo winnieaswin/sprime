@@ -73,6 +73,10 @@ sprime.searchForBluetoothDevices = function() {
                 $.each(deviceArray, function(index, value) {
                    $(devicesTable).append(sprime.createRowForDevice(value));
                 });
+
+                if (deviceArray.length == 0) {
+                    $(devicesTable).append(sprime.createEmptyRow());
+                }
             }
 
             $("#searchLink").removeClass('disabled');
@@ -173,6 +177,20 @@ sprime.createRowForDevice = function(deviceName) {
     deviceRow.appendChild(deviceNameCell);
     deviceRow.appendChild(deviceConnect);
 
+    return deviceRow;
+}
+
+sprime.createEmptyRow = function() {
+    
+    var deviceRow = document.createElement('tr');
+    $(deviceRow).addClass('deviceRow');
+    
+    var emptyCell = document.createElement('td');
+    $(emptyCell).attr('colspan', 2);
+    var empty = document.createTextNode('Could not find any devices...');
+    emptyCell.appendChild(empty);
+
+    deviceRow.appendChild(emptyCell);
     return deviceRow;
 }
 
