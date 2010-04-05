@@ -39,8 +39,7 @@ class PowerDataController {
                 use (TimeCategory) {
                     def currentDate = new Date();
 
-                    powerUsages = PowerUsage.findAllByDateCreatedBetween(currentDate,
-                        currentDate - 20.seconds);
+                    powerUsages = PowerUsage.findAllByDateCreatedBetween(currentDate - 20.seconds, currentDate);
                 }
         }
 
@@ -62,7 +61,7 @@ class PowerDataController {
 
             def col = [];
             def val1 = [:];
-            val1.v = it.dateCreated;
+            val1.v = String.format('%tT', it.dateCreated);
             col.add(val1);
 
             def val2 = [:];
