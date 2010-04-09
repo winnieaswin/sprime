@@ -29,10 +29,10 @@ sprime.config = {
         legend: 'none',
         enableTooltip: true,
         titleX: 'Day',
-        titleY: 'Power Usage',
+        titleY: 'Power Usage (Watts)',
         colors: ['green'],
-        max: 780,
-        min: 720
+        max: 200,
+        min: 000
     },
 
     // The current chart type to retrieve.
