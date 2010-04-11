@@ -13,7 +13,7 @@ import sprime.server.PowerUsage;
 public class Receiving implements Runnable {
 
     private double k = 0.75;		// percent of new value to believe
-	private double min_zero = 510;	// actual no current value
+	private double min_zero = 512;	// actual no current value
     private double avgDisplay = min_zero;// start at about zero
     
     private StreamConnection connection = null;
