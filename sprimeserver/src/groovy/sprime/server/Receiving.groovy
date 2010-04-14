@@ -45,7 +45,8 @@ public class Receiving implements Runnable {
 				// ~10 W per arduino division @5v sensor input
 				double val = (avgDisplay-min_zero) ;
 				if(val<0) val = 0;
-				val = val * 10;
+				//val = val * 10;
+				val = val * 9.0; // fiddle with scalar
 				
 				// display graph
                 PowerUsage usage = new PowerUsage(wattage: val);
