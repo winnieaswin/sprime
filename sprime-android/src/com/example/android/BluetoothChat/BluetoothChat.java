@@ -306,8 +306,9 @@ public class BluetoothChat extends Activity {
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
-                mConversationArrayAdapter.add(mConnectedDeviceName + ":  "
-                        + readMessage);
+//                mConversationArrayAdapter.add(mConnectedDeviceName + ":  "
+//                        + readMessage);
+                mConversationArrayAdapter.add( processArduinoData(readMessage) );
                 break;
             case MESSAGE_DEVICE_NAME:
                 // save the connected device's name
@@ -325,6 +326,23 @@ public class BluetoothChat extends Activity {
         }
     };
 
+    // XXX
+    private static float avgRaw = 512;
+    private final float minZero = avgRaw;
+    private final float pfactor = 9.0f;
+    private final float k = 0.75f;
+    private String processArduinoData(String rawData) {
+    	final int raw = Integer.parseInt(rawData);
+        if(raw>=minZero){
+        	avgRaw = (raw * k) + avgRaw * (1 - k);
+        }
+        float val = avgRaw - minZero;
+        if(val<0) val = 0;
+    	int watts = (int)(val * pfactor);
+    	String ret = "Power Consumption (Watts): " + watts;
+    	return ret;
+    }
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (D) {
