@@ -327,14 +327,37 @@ public class BluetoothChat extends Activity {
     };
 
     // XXX
-    private static float avgRaw = 512;
+    private static float avgRaw = 511;
     private final float minZero = avgRaw;
     private final float pfactor = 9.0f;
-    private final float k = 0.75f;
+    private final float k = 0.65f;
     private String processArduinoData(String rawData) {
-    	final int raw = Integer.parseInt(rawData);
+    	if(rawData.length()>2) {
+    		rawData = rawData.substring(0, rawData.length()-2);
+    	}else {
+    		// incorrect baud rate split number in half
+            float val = avgRaw - minZero;
+            if(val<0) val = 0;
+        	int watts = (int)(val * pfactor);
+        	return "Power Consumption (Watts): " + watts; 
+    	}
+    	Log.d("bt-chat", "raw data str: "+rawData);
+    	int raw = (int)minZero;
+    	try {
+			raw = Integer.parseInt(rawData);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		Log.d("bt-chat", "raw data int: "+raw);
         if(raw>=minZero){
         	avgRaw = (raw * k) + avgRaw * (1 - k);
+        }else {
+        	// tad bit lower reading than expected
+        	if(raw>=minZero-10){
+        		avgRaw = (minZero * k) + avgRaw * (1 - k);
+        	}else {
+        		// baud rate issue
+        	}
         }
         float val = avgRaw - minZero;
         if(val<0) val = 0;
