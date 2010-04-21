@@ -12,8 +12,8 @@ import sprime.server.PowerUsage;
 
 public class Receiving implements Runnable {
 
-    private double k = 0.75;		// percent of new value to believe
-	private double min_zero = 512;	// actual no current value
+    private double k = 0.70;		// percent of new value to believe
+	private double min_zero = 511;	// actual no current value
     private double avgDisplay = min_zero;// start at about zero
     
     private StreamConnection connection = null;
@@ -40,6 +40,8 @@ public class Receiving implements Runnable {
                 int watt = Integer.parseInt(lineRead);
                 if(watt>=min_zero){
                 	avgDisplay = (watt * k) + avgDisplay * (1 - k);
+                }else{
+                	avgDisplay = (min_zero * k) + avgDisplay * (1 - k);
                 }
 				
 				// ~10 W per arduino division @5v sensor input
