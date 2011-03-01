@@ -24,7 +24,7 @@ public class BluetoothDeviceDiscovery implements DiscoveryListener {
 
 	/**
 	 * Lists nearby bluetooth devices
-	 * 
+	 *
 	 * @return
 	 */
 	public void listDevices() throws IOException {
