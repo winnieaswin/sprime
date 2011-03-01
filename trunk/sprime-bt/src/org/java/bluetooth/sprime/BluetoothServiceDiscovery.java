@@ -14,13 +14,13 @@ import javax.bluetooth.ServiceRecord;
 import javax.bluetooth.UUID;
 
 /**
- * 
+ *
  * Class that discovers all bluetooth devices in the neighborhood,
- * 
+ *
  * Connects to the chosen device and checks for the presence of OBEX push service in it. and
  * displays their name and bluetooth address.
- * 
- * 
+ *
+ *
  */
 public class BluetoothServiceDiscovery implements DiscoveryListener {
 

@@ -6,7 +6,7 @@ public class SprimeBT {
 
 	/**
 	 * Main
-	 * 
+	 *
 	 * @param args
 	 */
 
